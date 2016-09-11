@@ -1,0 +1,37 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>Bean Counter</title>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+	<style>
+	/* The following styles are used only for this page - the actual plugin styles are in slidernav.css */
+	* { margin: 0; padding: 0; }
+
+	</style>
+	<script>
+
+	/*$.get("https://dweet.io/get/latest/dweet/for/far-flung-balls", function( data ) {
+  		alert(data["with"][0]["content"]["tilt_x"]);
+	});*/
+
+	function poll(){
+	$.get("https://dweet.io/get/latest/dweet/for/far-flung-balls", function( data ) {
+	  		//alert(data["with"][0]["content"]["tilt_x"]);
+
+	  		var state = data["with"][0]["content"]["tilt_x"] > 20 ? 'open' : 'closed'
+	  		console.log(state)
+		});
+	}
+
+	setInterval(function(){ poll(); }, 2000);
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
