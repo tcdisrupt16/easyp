@@ -13,6 +13,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <div id="viewport" style="width: 200px; height: 200px; margin: auto; display: block;"></div>
 <a href="javascript:player.pause();"><img src="../../images/wc.svg" width="30" height="30"></a>
+<h1 id="msg" style="position: absolute; top: 200px; left:200px;color:#ffffff;z-index : -4000;">fuck off!</h1>
 <script>
     var player = null;
 
@@ -72,8 +73,8 @@
 
             player = new AVOD.VODPlayer({
                 target: "#viewport",
-                width: "50%",
-                height: "50%"
+                width: "75%",
+                height: "75%"
             });
 
             player.addEventListener(AVOD.Events.READY, onReadyHandler);
@@ -93,32 +94,23 @@
         $('#myModal').modal('show');
     }
 
+    function poll() {
+        $.get("https://dweet.io/get/latest/dweet/for/easyp-queue", function( data ) {
+            people = data["with"][0]["content"]["people"];
+
+            if (people == 0) {
+                $("#msg").attr("style", "position: absolute; top: 20px; left:20px;color:#ffffff;z-index : 2147483647;");
+                player.pause();
+            }
+        });
+    }
+
+    setInterval(function () { poll () }, 2000);
+
 </script>
 <div>
 
 </div>
 <a href="javascript:toogleModal()"><img src="../../images/wc.svg" style="position: absolute; top: 5px; left: 5px; width 35px; height: 35px; z-index: 2147483647"></a>
-<img id="poster">
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog" style="z-index: 2147483647">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 </body>
 </html>
