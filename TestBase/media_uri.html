@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://tc16n.panasonic.aero/inflight.js"></script>
+</head>
+<body>
+<script>
+    InFlight.initService(['metadata/v1', 'avod/v1'], function(Metadata, AVOD) {
+        Metadata.categories(
+                {
+                    seat_class: "all"
+                },
+                function(err, category){
+                    console.log(category);
+                }
+        );
+
+    });
+</script>
+
+
+</body>
+</html>

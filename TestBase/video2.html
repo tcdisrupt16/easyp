@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+<body style="background: #1b75bb;">
+
+<script src="https://tc16n.panasonic.aero/inflight.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<div id="viewport" style="width: 200px; height: 200px; margin: auto; display: block;"></div>
+<a href="javascript:player.pause();"><img src="../../images/wc.svg" width="30" height="30"></a>
+<script>
+    var player = null;
+
+    $(function() {
+
+        InFlight.initService(["avod/v1", "flightdata/v2", "metadata/v1"], function(AVOD, FlightData, MetaData) {
+            MetaData.mediaMetadata(
+                    {
+                        media_uri: "media:46010:"
+                    },
+                    function(err, media) {
+                        $("#poster").attr("src", media.poster_url.size_1);
+                    }
+            );
+
+            var onReadyHandler = function(event) {
+                event.player.removeEventListener(event.type, onReadyHandler);
+
+                // The player is in the DOM and ready to be manipulated
+            };
+
+            var onErrorHandler = function(event) {
+
+                switch(event.code)
+                {
+                    case 1001:
+                        // Bandwidth Allocation Error
+                        break;
+                    case 1002:
+                        // Network Bandwidth Allocation Service Unavailable
+                        break;
+                    case 1003:
+                        // Bad Request
+                        break;
+                    case 1004:
+                        // Media player is not supported on this device
+                        break;
+                }
+            };
+
+            var onWarningHandler = function(event) {
+
+                switch(event.code)
+                {
+                    case 2001:
+                        // Media player is not fully supported on this device
+                        if(confirm("This device does not fully support the media player.  Would you like to continue?"))
+                        {
+                            player.reloadWithPartialSupport();
+                        }
+                        break;
+                    case 2002:
+                        // Network timeout has occurred
+                        break;
+                }
+            };
+
+            player = new AVOD.VODPlayer({
+                target: "#viewport",
+                width: "50%",
+                height: "50%"
+            });
+
+            player.addEventListener(AVOD.Events.READY, onReadyHandler);
+            player.addEventListener(AVOD.Events.ERROR, onErrorHandler);
+            player.addEventListener(AVOD.Events.WARNING, onWarningHandler);
+
+            player.load({
+                media_uri: "media:46010:",
+                autoplay: true,
+            });
+        });
+    });
+
+    function toogleModal() {
+        player.pause();
+
+        $('#myModal').modal('show');
+    }
+
+</script>
+<div>
+
+</div>
+<a href="javascript:toogleModal()"><img src="../../images/wc.svg" style="position: absolute; top: 5px; left: 5px; width 35px; height: 35px; z-index: 2147483647"></a>
+<img id="poster">
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" style="z-index: 2147483647">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
